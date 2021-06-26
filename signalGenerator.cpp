@@ -2,7 +2,7 @@
 #include "lnSPI.h"
 #include "signal.h"
 #include "gd32ST7735.h"
-#include "FreeSans7pt7b.h"
+#include "assets/FreeSans7pt7b.h"
 
 #define splash_width 128
 #define splash_height 96

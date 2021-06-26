@@ -1,0 +1,15 @@
+*.sw*
+*.*~
+nbproject/*
+build/*
+build
+*.rej
+*.back
+*/bin
+build*
+*.bin
+.vscode
+pyUsb/__pycache__/
+pyUsb/*.csv
+bins
+demoProject/*/Arduino_gd32_freeRTOS
