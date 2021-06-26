@@ -1,0 +1,31 @@
+
+SET(AF_FOLDER  ${CMAKE_SOURCE_DIR}/lnArduino/)
+
+SET(CMAKE_TOOLCHAIN_FILE ${AF_FOLDER}/ArduinoToolchainGd32.cmake)
+cmake_minimum_required(VERSION 3.0)
+
+PROJECT(SignalGenerator C CXX ASM)
+
+include_directories(${CMAKE_SOURCE_DIR})        
+add_subdirectory(${AF_FOLDER})
+
+
+include(${AF_FOLDER}/setup.cmake)
+        
+SET(ST7735_DRIVER ${AF_FOLDER}/libraries/simplerST7735/platformExample/longanNano/gd32ST7735.cpp)
+include_directories(ST7735_DRIVER ${AF_FOLDER}/libraries/simplerST7735/platformExample/longanNano/)
+
+MACRO(XUSE_LIBRARY lib)
+    add_subdirectory(${AF_FOLDER}/libraries/${lib})
+    include_directories(${AF_FOLDER}/libraries/${lib})
+    LIST(APPEND USED_LIBS ${lib})
+ENDMACRO(XUSE_LIBRARY lib)
+
+
+
+XUSE_LIBRARY(simplerST7735)
+
+
+GENERATE_GD32_FIRMWARE(signalGenerator signalGenerator.cpp signal.cpp  ${AMG})         
+
+        
