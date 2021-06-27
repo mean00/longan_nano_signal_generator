@@ -3,6 +3,7 @@
 #include "signal.h"
 #include "gd32ST7735.h"
 #include "assets/FreeSans7pt7b.h"
+#include "RotaryEncoder.h"
 
 #define splash_width 128
 #define splash_height 96
@@ -22,7 +23,7 @@
 #define PINDC PB0
 #define PINCS PB2
 #define PINRST PB1
-
+lnRotary *re=NULL;
 
 /**
  * 
@@ -38,6 +39,8 @@ void setup()
 void loop()
 {
     Logger("Entering main app...\n");
+    re=new lnRotary(PB5,PB6,PB7);
+    re->start();
    
 #if 1   
     Logger("Starting LCD...\n");
