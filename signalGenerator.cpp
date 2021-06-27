@@ -78,36 +78,28 @@ void loop()
     Logger("Starting Signal Generator...\n");
     SignalGenerator *signal=new SignalGenerator(PA4,0);    
     signal->start(25000,SignalGenerator::SignalSine);
-#if 1    
+  
     Logger("waiting...\n");
+    
+    int count=0;
     while(1)
     {
-        xDelay(10);
-    }
-#endif
-#if 0    
-    int r=0;
-    int roundup;
-    bool onoff;
-    while(1)
-    {
-        roundup++;
-        vTaskDelay(1200);
-        digitalToggle(LED);
-        onoff=!onoff;
-        if(onoff)
+        int ev=re->waitForEvent();
+        if(ev & lnRotary::SHORT_PRESS)
         {
-            lcd->square(0x1f,10,20,40,20);
-            lcd->print(20,20,"This is  a test");
-        }else
-        {
-            lcd->square(0xffff,10,20,40,20);
+            Logger("Short press\n");
         }
-        r++;
-        r&=15;
-        lcd->setRotation(r>>2);
-        Logger("Blue\n");
+        if(ev & lnRotary::LONG_PRESS)
+        {
+            Logger("LONG press\n");
+        }
+        if(ev & lnRotary::ROTARY_CHANGE)
+        {
+            Logger("change press\n");
+            count=count+re->getCount();
+            Logger("New value=%d\n",count);
+        }
+        
     }
-#endif    
 }
 
