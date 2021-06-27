@@ -13,6 +13,10 @@
 #define LED     PA2
 #define LEDRED  PC13
 
+// Rotary Encoder
+#define ROT_LEFT    PB6
+#define ROT_RIGHT   PB7
+#define ROT_PUSH    PB5
 
 
 // MOSI is PA7
@@ -39,7 +43,7 @@ void setup()
 void loop()
 {
     Logger("Entering main app...\n");
-    re=new lnRotary(PB5,PB6,PB7);
+    re=new lnRotary(ROT_PUSH,ROT_LEFT,ROT_RIGHT);
     re->start();
    
 #if 1   
