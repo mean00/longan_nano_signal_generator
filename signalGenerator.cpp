@@ -6,7 +6,7 @@
 #include "assets/fonts/FreeSans9pt7b.h"
 #include "RotaryEncoder.h"
 
-#include "sine_decl.h"
+#include "assets.h"
 
 #define splash_width 128
 #define splash_height 96

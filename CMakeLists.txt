@@ -19,7 +19,7 @@ include_directories(ST7735_DRIVER ${AF_FOLDER}/libraries/simplerST7735/platformE
 USE_LIBRARY(simplerST7735)
 USE_LIBRARY(RotaryEncoder)
 
-include_directories(assets/pics/generated)
+include_directories(assets)
 add_subdirectory(assets)
 
 GENERATE_GD32_FIRMWARE(signalGenerator signalGenerator.cpp signal.cpp  ${AMG})         

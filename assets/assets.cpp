@@ -1,7 +1,7 @@
 #include "lnArduino.h"
-#include "sine_compressed.h"
-#include "square_compressed.h"
-#include "triangle_compressed.h"
+#include "pics/generated/sine_compressed.h"
+#include "pics/generated/square_compressed.h"
+#include "pics/generated/triangle_compressed.h"
 #include "signal.h"
 /**
  * 
@@ -19,5 +19,6 @@ const unsigned char *GetIcon(SignalGenerator::SignalForm a)
             break;
     }
     xAssert(0);
+    return NULL;
 }
 // EOF
