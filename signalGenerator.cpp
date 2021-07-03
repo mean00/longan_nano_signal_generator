@@ -23,18 +23,12 @@ TopAction   top;
 WaveAction waveForm(3,&(signalSettings.waveForm));
 DigitAction hiDigit(10);
 DigitAction loDigit(10);
-DigitAction scaleDigit(4);
+DigitAction scaleDigit(6);
 
 
 const unsigned char *GetIcon(SignalGenerator::WaveForm a);
-/**
- * 
- */
-void setup()
-{
-    pinMode(LED,OUTPUT);
-    digitalWrite(LED,HIGH);
-}
+
+
 /**
  * 
  */
@@ -53,20 +47,93 @@ static const char *unit[3]={"Hz","kHz","MHz"};
 /**
  * 
  */
+
+#define DIGITWIDTH 16    
+#define DIGITSPACE (DIGITWIDTH+2)
+#define DIGITHEIGHT 4
+#define DIGITDOT    10
+
+void drawSel(int widget, int color)
+{
+        
+        switch(widget)
+        {
+            case 0: // Wave
+                lcd->square(color,0,0,56,56);
+                break;
+            case 1: // HI
+                lcd->square(color,57,32,DIGITWIDTH,DIGITHEIGHT);
+                break;
+            case 2: // LOW
+               lcd->square(color,57+DIGITDOT+DIGITSPACE,32,DIGITWIDTH,DIGITHEIGHT);
+                break;
+            case 3: // SCALE
+                lcd->square(color,57+DIGITDOT+2*DIGITSPACE,32,DIGITWIDTH,DIGITHEIGHT);
+                break;
+        }
+}
+
 void redraw()
 {
-    lcd->drawRLEBitmap(sine_width,sine_height,2,2,0xffff,0,GetIcon(SignalGenerator::SignalSquare));
+    lcd->fillScreen(0);
+    
+    int sel=top.getSelection();
+    if(sel==-1) // top widget
+    {
+        int widget=top.getValue();
+        drawSel(widget,0x1f<<11);
+    }else
+    {
+          drawSel(sel,0x1f<<6);
+    }
+        
+    
+    lcd->drawRLEBitmap(sine_width,sine_height,2,2,0xffff,0,GetIcon(signalSettings.waveForm));
     lcd->setFontSize(st7735::BigFont);    
-    lcd->print(48+4+2,24,"987");
+    int fq=hiDigit.getValue()*10+loDigit.getValue();
+    int r=scaleDigit.getValue();
+    while(r--)
+    {
+        fq=fq*10;
+    }
+    fq/=10;
+    if(fq<1) fq=1;
+    if(fq>100000) fq=100000;
+    signalSettings.frequency=fq;
+    char str[5]="0000";
+    str[0]='0'+hiDigit.getValue();
+    str[1]='.';
+    str[2]='0'+loDigit.getValue();
+    str[3]='0'+scaleDigit.getValue();
+    lcd->print(48+4+2,28,str);
+    updateSignal();
+    
+    int actualFq=signal->getActualFrequency();
+    if(actualFq)
+    {
+        const char *ext="";
+        if(actualFq>10*000)
+        {
+            actualFq/=1000;
+            ext="k";
+        }else
+        {
+            
+        }
+        char str[20];
+        sprintf(str,"%d%s",actualFq,ext);
+        lcd->setFontSize(st7735::SmallFont); 
+        lcd->print(48+4+2,56,str);
+    }
 }
 /**
  * 
  */
-void runLoop()
+void loop()
 {
-    bool pressed=true;
+    bool pressed=false;
     int count=0;
-    int ev=re->waitForEvent();
+    int ev=re->waitForEvent(5000);
     if(ev & lnRotary::SHORT_PRESS)
     {
         pressed=true;
@@ -79,20 +146,25 @@ void runLoop()
     {
         count=re->getCount();
     }
-
+    if(!ev)
+    {
+        redraw();
+        return;
+    }
 
     while(count)
     {
         Action *currentWidget=top.getCurrent();
         if(count>0)
         {
-            currentWidget->turnLeft();
+            currentWidget->turnRight();
             count--;
         }else
         {
-            currentWidget->turnRight();
+            currentWidget->turnLeft();
             count++;            
         }
+        redraw();
     }
 
     if(pressed)
@@ -104,9 +176,17 @@ void runLoop()
 }
 /**
  */
-void loop()
+/**
+ * 
+ */
+void setup()
 {
     Logger("Entering main app...\n");
+    
+    pinMode(LED,OUTPUT);
+    digitalWrite(LED,HIGH);
+    
+    
     
     signalSettings.frequency=10*1000;
     signalSettings.waveForm=SignalGenerator::SignalSine;
@@ -163,11 +243,6 @@ void loop()
     hiDigit.setValue(1);
     loDigit.setValue(0);
     scaleDigit.setValue(3); // 1khz default value
-
-    while(1)
-    {
-        runLoop();
-    }
-    
+    redraw();
 }
-
+// EOF

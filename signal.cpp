@@ -91,6 +91,6 @@ void    SignalGenerator::start(int fq, WaveForm form)
  */
 int     SignalGenerator::getActualFrequency()
 {
-    return _dac->getDmaFrequency();
+    return _dac->getDmaFrequency()/_nbPoints;
 }
 // EOF

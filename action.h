@@ -33,7 +33,10 @@ public:
     {
         selection=index;
     };
-   
+    int getValue()
+    {
+        return index;
+    }
     void addAction(Action *a)
     {
         actions[max]=a;
@@ -72,6 +75,10 @@ public:
         index=0;
         _parent=NULL;
         _max=mx;
+    }
+    int getValue()
+    {
+        return index;
     }
     void setValue(int v)
     {
