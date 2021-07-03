@@ -42,17 +42,15 @@ void    SignalGenerator::stop()
  */
 void    SignalGenerator::start(int fq, SignalForm form)
 {
+    _dac->startDmaMode(fq*100);
+    int actualFq=_dac->getDmaFrequency();
+    float pointFloat=(float)(actualFq+fq/2)/(float)fq;
+    _nbPoints=floor(pointFloat+0.49);
+    Logger("In Fq=%d outFq=%d, # points=%d pointsF=%f\n",fq,actualFq,_nbPoints,pointFloat);
     switch(form)
     {
         case SignalSine:    
-        {
-            _dac->startDmaMode(fq*100);
-            int actualFq=_dac->getDmaFrequency();
-            float pointFloat=(float)(actualFq+fq/2)/(float)fq;
-            _nbPoints=floor(pointFloat+0.49);
-            Logger("In Fq=%d outFq=%d, # points=%d pointsF=%f\n",fq,actualFq,_nbPoints,pointFloat);
-
-             
+        {            
             for(int i=0;i<_nbPoints;i++)
             {
                   float angle=2.*M_PI;
@@ -62,6 +60,24 @@ void    SignalGenerator::start(int fq, SignalForm form)
             }
         }
             break;
+        case SignalSquare:
+        {
+            int left=_nbPoints/2;
+            int right=_nbPoints-left;
+            memset(_waveForm,0,left*2);
+            memset(&_waveForm[left],0xff,right*2);
+        }
+        break;
+          case SignalTriangle:
+        {
+            for(int i=0;i<_nbPoints;i++)
+            {
+                float f=(float)i/(float)_nbPoints;
+                f*=4095;
+                _waveForm[i]=(int)f;
+            }
+        }
+        break;
         default:
             xAssert(0);
             break;

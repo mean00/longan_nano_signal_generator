@@ -8,9 +8,6 @@
 
 #include "assets.h"
 
-#define splash_width 128
-#define splash_height 96
-
 
 // green = PA1, blue = PA2, RED PC13
 #define LED     PA2
@@ -30,6 +27,7 @@
 #define PINDC PB0
 #define PINCS PB2
 #define PINRST PB1
+
 lnRotary *re=NULL;
 
 const unsigned char *GetIcon(SignalGenerator::SignalForm a);
@@ -94,8 +92,6 @@ void loop()
     
     lcd->fillScreen(0);
     lcd->setTextColor(0xFFFF,0);
-    lcd->print(2,20,"Signal Generator");
-    lcd->setFontSize(st7735::MediumFont);    
     xstat(2);
 #endif    
 #if 0
@@ -106,13 +102,14 @@ void loop()
 #else
     Logger("Starting Signal Generator...\n");
     SignalGenerator *signal=new SignalGenerator(PA4,0);    
-    signal->start(25000,SignalGenerator::SignalSine);
-  
+  //  signal->start(25000,SignalGenerator::SignalSine);
+    signal->start(25000,SignalGenerator::SignalSquare);
     Logger("waiting...\n");
     xstat(3);
     int count=0;
     lcd->drawRLEBitmap(sine_width,sine_height,2,2,0xffff,0,GetIcon(SignalGenerator::SignalSquare));
-    lcd->print(64+4+2,20,"123.4kHz");
+    lcd->setFontSize(st7735::MediumFont);    
+    lcd->print(48+4+2,20,"909.9k");
     while(1)
     {
        // lcd->print(2,20,"Signal Generator");
