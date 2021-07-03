@@ -8,7 +8,7 @@
  * @param a
  * @return 
  */
-const unsigned char *GetIcon(SignalGenerator::SignalForm a)
+const unsigned char *GetIcon(SignalGenerator::WaveForm a)
 {
     switch(a)
     {

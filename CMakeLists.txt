@@ -22,6 +22,6 @@ USE_LIBRARY(RotaryEncoder)
 include_directories(assets)
 add_subdirectory(assets)
 
-GENERATE_GD32_FIRMWARE(signalGenerator signalGenerator.cpp signal.cpp  ${AMG})         
+GENERATE_GD32_FIRMWARE(signalGenerator signalGenerator.cpp signal.cpp action.cpp  ${AMG})         
 target_link_libraries(signalGenerator assets)
         

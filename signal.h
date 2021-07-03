@@ -6,7 +6,7 @@
 class SignalGenerator
 {
 public:
-            enum SignalForm    
+            enum WaveForm    
             {
                 SignalSine=0,
                 SignalSquare=1,
@@ -16,7 +16,7 @@ public:
                     SignalGenerator(lnPin pin,int fac);
             virtual ~SignalGenerator();
             void    stop();
-            void    start(int fq, SignalForm form);
+            void    start(int fq, WaveForm form);
             int     getActualFrequency();
 
 protected:

@@ -40,7 +40,7 @@ void    SignalGenerator::stop()
  * @param fq
  * @param form
  */
-void    SignalGenerator::start(int fq, SignalForm form)
+void    SignalGenerator::start(int fq, WaveForm form)
 {
     _dac->startDmaMode(fq*100);
     int actualFq=_dac->getDmaFrequency();
